@@ -7,18 +7,18 @@ function App() {
   const [todos, setTodos] = useState([]);
 
   const addTodo = (todo) => {
-    setTodos((prevTodos) => [{ id: Date.now(), ...todo }, prevTodos]);
+    setTodos((prevTodos) => [{ id: Date.now(), ...todo }, ...prevTodos]);
   };
 
   const updateTodo = (id, todo) => {
     setTodos((prevTodos) =>
-      prevTodos.map((prevTodo) => (prevTodo.id === id ? "" : ""))
+      prevTodos.map((prevTodo) => (prevTodo.id === id ? todo : prevTodo))
     );
   };
 
-  const deleteTodo = (id) =>
+  const deleteTodo = (id) =>{
     setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
-
+  }
   const toggleComplete = (id) =>
     setTodos((prevTodos) =>
       prevTodos.map((todo) =>
@@ -31,7 +31,7 @@ function App() {
     if (todos && todos.length > 0) {
       setTodos(todos);
     }
-  }, []);
+  }, [todos]);
 
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todos));
@@ -52,7 +52,6 @@ function App() {
               <TodoForm />
             </div>
             <div className="flex flex-wrap gap-y-3">
-            {console.log(todos)}
               {todos.length > 0 ? (
                 todos.map((todo) => (
                   <div key={todo.id} className="w-full">
